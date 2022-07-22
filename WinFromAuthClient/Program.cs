@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -31,7 +32,13 @@ namespace WinFromAuthClient
         {
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
-                    services.AddHttpClient();
+                    services.AddHttpClient("MyClient")
+                    .ConfigurePrimaryHttpMessageHandler(() => {
+                        var httpClientHandler = new HttpClientHandler();
+                        httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+                        return httpClientHandler;
+                    });
                     services.AddTransient<Form1>();
                 });
         }

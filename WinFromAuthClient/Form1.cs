@@ -31,14 +31,14 @@ namespace WinFromAuthClient
         }
 
         public async void BtnClick(object sender, EventArgs e)
-        {
+        {         
             var input = JsonSerializer.Serialize(new { username = textBox1.Text, password = textBox2.Text });
 
             var reqContent = new StringContent(input, Encoding.UTF8, "application/json");
 
-            var hc = _factory.CreateClient();
+            var hc = _factory.CreateClient("MyClient");
 
-            var result = await hc.PostAsync("https://localhost:5001/api/v1.0/login/verify", reqContent);
+            var result = await hc.PostAsync("https://172.16.53.174:883/api/v1.0/login/verify", reqContent);
 
             label1.Text = !result.IsSuccessStatusCode ? "Disconnected" : "Connected";
 
